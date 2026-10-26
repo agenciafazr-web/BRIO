@@ -1,1 +1,60 @@
-import Link from 'next/link';import Header from '../components/Header';import Footer from '../components/Footer';import {posts} from '../lib/posts';export default function Home(){const lead=posts[0],rest=posts.slice(1);return <><Header/><main className="home newbrio"><section className="movement"><div className="container movementgrid"><div className="movementcopy"><span className="signal"><i/> BRIO BRASIL</span><h1>O Brasil não precisa<br/>de mais plateia.<br/><em>Precisa de brio.</em></h1><p>Informação, contexto e atitude para quem não desistiu de participar do país.</p><div className="movementactions"><a href="#agora">ENTENDER O AGORA <b>↘</b></a><span>liberdade · responsabilidade · coragem</span></div></div><div className="movementvisual"><div className="giantb">B<span>.</span></div><div className="visualnote"><b>01</b><p>Não é sobre assistir de longe.<br/><strong>É sobre fazer parte.</strong></p></div><div className="orbit orbit1">BRASIL</div><div className="orbit orbit2">ATITUDE</div></div></div></section><section className="livebar"><div className="container"><b><i/> BRIO AGORA</b><div><span>#Brasil</span><span>#Política</span><span>#Segurança</span><span>#Economia</span><span>#Mundo</span></div><small>26 OUT 2026</small></div></section><section className="now container" id="agora"><div className="nowhead"><div><span>O QUE IMPORTA AGORA</span><h2>Entenda antes de opinar.</h2></div><p>Menos volume. Mais contexto.<br/>O essencial para entrar na conversa.</p></div><div className="nowgrid"><Link className="nowlead" href={'/noticia/'+lead.slug}><div className="nowart"><span>{lead.category}</span><b>01</b></div><div className="nowcopy"><small>DESTAQUE</small><h3>{lead.title}</h3><p>{lead.excerpt}</p><strong>LER E ENTENDER →</strong></div></Link><div className="nowstack">{rest.slice(0,3).map((p,i)=><Link href={'/noticia/'+p.slug} className="nowitem" key={p.id}><b>0{i+2}</b><div><span>{p.category}</span><h3>{p.title}</h3><small>{p.publishedAt}</small></div><i>↗</i></Link>)}</div></div></section><section className="voices"><div className="container"><div className="voiceshead"><span>BRIO NÃO É SÓ NOTÍCIA</span><h2>Ideias que dão<br/><em>vontade de participar.</em></h2></div><div className="voicecards"><article className="voicecard green"><small>BRIO EXPLICA</small><h3>Tá todo mundo falando.<br/>Mas o que isso muda?</h3><p>O contexto do assunto do dia em poucos minutos.</p><b>ENTENDA →</b></article><article className="voicecard ink"><small>NA REAL</small><h3>Sem linguagem de gabinete. Sem enrolação.</h3><p>Opinião com argumento, posição clara e espaço para discordar.</p><b>ENTRE NA CONVERSA →</b></article><article className="voicecard lime"><small>VOCÊ NO BRIO</small><h3>O Brasil também acontece onde você está.</h3><p>Ideias, histórias e pautas de quem vive o país de verdade.</p><b>FAÇA PARTE →</b></article></div></div></section><section className="community container"><div className="communitytag">#EU<br/>TENHO<br/><b>BRIO.</b></div><div className="communitycopy"><span>PERTENCIMENTO</span><h2>Uma marca pra quem ainda<br/><em>se importa com o Brasil.</em></h2><p>Não queremos formar uma audiência que só rola a tela. Queremos reunir gente que lê, questiona, conversa, compartilha e participa.</p><div className="communitychips"><span>🇧🇷 Brasil real</span><span>⚡ Sem enrolação</span><span>💬 Conversa aberta</span><span>→ Atitude</span></div></div></section><section className="manifesto"><div className="container manifestogrid"><span>BRIO / 2026</span><h2>Informação sem atitude<br/>é só barulho.</h2><div><p>O fato é o começo.<br/>Entender é o próximo passo.<br/><strong>Participar é ter BRIO.</strong></p><Link href="/">CONHEÇA O MOVIMENTO ↗</Link></div></div></section></main><Footer/></>;}
+import Link from 'next/link';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+import { posts } from '../lib/posts';
+
+export default function Home(){
+  const lead=posts[0];
+  const secondary=posts.slice(1,3);
+  const latest=posts.slice(3);
+  return <>
+    <Header/>
+    <main className="home">
+      <section className="homehero container">
+        <Link className={'homelead '+lead.tone} href={'/noticia/'+lead.slug}>
+          <div className="homeleadcopy">
+            <span className="pill">{lead.category}</span>
+            <h1>{lead.title}</h1>
+            <p>{lead.excerpt}</p>
+            <small>{lead.author} · {lead.publishedAt}</small>
+          </div>
+        </Link>
+        <div className="herorail">
+          {secondary.map((p,i)=><Link href={'/noticia/'+p.slug} className="railstory" key={p.id}>
+            <div className={'railimage '+p.tone}><span>0{i+2}</span></div>
+            <div><span className="eyebrow">{p.category}</span><h2>{p.title}</h2><small>{p.publishedAt}</small></div>
+          </Link>)}
+        </div>
+      </section>
+
+      <section className="quick container">
+        <div className="quicklabel"><i/> AGORA</div>
+        <div className="quickitems"><span>Política sem enrolação</span><span>Economia no seu bolso</span><span>Segurança além da manchete</span><span>O mundo e o impacto no Brasil</span></div>
+      </section>
+
+      <section className="fresh container">
+        <div className="cleanhead"><div><span>ÚLTIMAS</span><h2>O que você precisa saber</h2></div><Link href="/">Ver tudo</Link></div>
+        <div className="freshgrid">
+          {latest.map((p,i)=><Link className="freshcard" href={'/noticia/'+p.slug} key={p.id}>
+            <div className={'freshimage '+p.tone}><b>0{i+1}</b></div>
+            <span className="eyebrow">{p.category}</span>
+            <h3>{p.title}</h3>
+            <p>{p.excerpt}</p>
+            <small>{p.publishedAt}</small>
+          </Link>)}
+        </div>
+      </section>
+
+      <section className="perspective">
+        <div className="container perspectivegrid">
+          <div className="perspectiveintro"><span>BRIO / IDEIAS</span><h2>Notícia é fato.<br/>Opinião tem assinatura.</h2><p>Um espaço para entender o debate sem esconder de onde cada argumento parte.</p></div>
+          <Link href="/" className="ideacard"><span>EDITORIAL</span><h3>Informação rápida não precisa ser informação rasa.</h3><p>Direto ao ponto, com contexto, fonte e responsabilidade.</p><b>Ler opinião →</b></Link>
+          <Link href="/" className="ideacard light"><span>ANÁLISE</span><h3>Menos torcida.<br/>Mais contexto.</h3><p>Elementos para você formar a sua própria opinião.</p><b>Ler análise →</b></Link>
+        </div>
+      </section>
+
+      <section className="brandstatement container"><span>BRIO É</span><h2>Coragem para perguntar.<br/><em>Responsabilidade para informar.</em></h2><p>Um portal brasileiro, jovem e direto — para quem quer entender antes de repetir.</p></section>
+    </main>
+    <Footer/>
+  </>
+}
