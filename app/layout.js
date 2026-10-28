@@ -3,6 +3,7 @@ import './home-premium.css';
 import './home-newshero.css';
 import './citizen.css';
 import './citizen-executive.css';
+import './voice.css';
 import './editoria/editoria.css';
 import './admin/ads-admin.css';
 import './admin/ad-formats.css';

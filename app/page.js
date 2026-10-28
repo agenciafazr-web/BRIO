@@ -18,6 +18,30 @@ export default async function Home(){
  <AdSlot ad={ad('home_feed')} className="adFeed container"/>
  <CitizenFinder/>
  <AdSlot ad={ad('top')} className="adTop container"/>
- <section className="container formats" id="formatos"><div className="formatIntro"><span>UM JEITO DIFERENTE DE FALAR DO BRASIL</span><h2>Menos bancada.<br/>Mais conversa.</h2><p>Conteúdo com personalidade, clareza e posição identificada.</p></div><Link href={'/noticia/'+lead.slug} className="formatCard explain"><span>01 / BRIO EXPLICA</span><h3>O assunto que todo mundo comenta, explicado sem complicação.</h3><p>O fato, o contexto e por que aquilo realmente importa para você.</p><b>QUERO ENTENDER →</b></Link><Link href="/editoria/opiniao" className="formatCard real"><span>02 / NA REAL</span><h3>Opinião não precisa parecer discurso de gabinete.</h3><p>Argumento, posição clara e espaço para quem pensa diferente.</p><b>ENTRAR NA CONVERSA →</b></Link></section>
+ <section className="voice" id="participe"><div className="container voiceShell">
+   <div className="voiceLead">
+     <span className="voiceEyebrow"><i/> SUA VOZ NA BRIO</span>
+     <h2>Tem algo que a BRIO precisa saber?</h2>
+     <p>Uma história, uma denúncia ou um ponto de vista. A BRIO quer abrir espaço para quem vive o Brasil de verdade.</p>
+     <div className="voicePromise"><b>3</b><span>formas de participar<br/><small>pauta · denúncia · opinião</small></span></div>
+   </div>
+   <div className="voiceActions">
+     <div className="voiceAction voiceActionMain">
+       <div className="voiceActionIndex">01</div>
+       <div className="voiceActionCopy"><span>PAUTA</span><h3>Sugira uma história.</h3><p>Conte um fato, problema ou assunto que merece atenção da BRIO.</p></div>
+       <div className="voiceActionFoot"><b>ENVIAR PAUTA</b><small>FORMULÁRIO EM PREPARAÇÃO</small><i>→</i></div>
+     </div>
+     <div className="voiceAction">
+       <div className="voiceActionIndex">02</div>
+       <div className="voiceActionCopy"><span>DENÚNCIA</span><h3>Tem informação importante?</h3><p>Documentos, imagens ou relatos que precisam chegar à redação.</p></div>
+       <div className="voiceActionFoot"><b>ENVIAR INFORMAÇÃO</b><small>CANAL SEGURO EM PREPARAÇÃO</small><i>→</i></div>
+     </div>
+     <div className="voiceAction voiceActionSoft">
+       <div className="voiceActionIndex">03</div>
+       <div className="voiceActionCopy"><span>OPINIÃO</span><h3>Entre na conversa.</h3><p>Compartilhe seu ponto de vista sobre os assuntos que movem o país.</p></div>
+       <div className="voiceActionFoot"><b>MANDAR OPINIÃO</b><small>FORMULÁRIO EM PREPARAÇÃO</small><i>→</i></div>
+     </div>
+   </div>
+ </div></section>
  <section className="container finalCall"><span>BRIO BRASIL · INFORMAÇÃO + CONTEXTO + ATITUDE</span><h2>Menos espectador.<br/><strong>Mais brasileiro presente.</strong></h2><p>Porque notícia é só o começo. O Brasil precisa recuperar seu BRIO.</p><a href="#agora">VOLTAR AO QUE IMPORTA ↑</a></section></main><Footer/></>;
 }
