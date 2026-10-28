@@ -6,7 +6,7 @@ const presets=['Ananindeua, PA','Belém, PA','Marabá, PA'];
 function Person({person,type}){
  return <a className="citizenPerson" href={person.url} target="_blank" rel="noreferrer">
    <div className="citizenAvatar">{person.photo?<img src={person.photo} alt={person.name}/>:<span>{person.name?.slice(0,1)}</span>}</div>
-   <div className="citizenPersonCopy"><small>{type}</small><strong>{person.name}</strong><span>{person.party} · {person.uf}</span></div>
+   <div className="citizenPersonCopy"><small>{type}</small><strong>{person.name}</strong><span>{person.party?person.party+' · ':''}{person.uf}</span></div>
    <b>↗</b>
  </a>
 }
@@ -18,7 +18,7 @@ function ExecutiveCard({person}){
    <div className="citizenExecutiveCopy">
      <small>{person.office}</small>
      <strong>{person.name}</strong>
-     <span>{person.party||'Partido não informado'} · {person.uf}</span>
+     <span>{person.party?person.party+' · ':''}{person.uf}</span>
      <em>{person.term}</em>
    </div>
    <div className="citizenExecutiveMeta"><span>{person.elected}</span><b>↗</b></div>
@@ -37,7 +37,7 @@ export default function CitizenFinder(){
    if(!q)return;
    setQuery(q);setLoading(true);setError('');setShowAll(false);
    try{
-     const response=await fetch('/api/cidadao?q='+encodeURIComponent(q));
+     const response=await fetch('/api/cidadao?q='+encodeURIComponent(q),{cache:'no-store'});
      const payload=await response.json();
      if(!response.ok)throw new Error(payload.error||'Não foi possível consultar agora.');
      setData(payload);
@@ -48,6 +48,7 @@ export default function CitizenFinder(){
  const deputies=data?.deputies||[];
  const visibleDeputies=showAll?deputies:deputies.slice(0,6);
  const executives=[data?.executives?.mayor,data?.executives?.governor].filter(Boolean);
+ const unavailable=data?.unavailable||[];
 
  return <section className="citizen" id="comunidade">
    <div className="container citizenShell">
@@ -67,7 +68,7 @@ export default function CitizenFinder(){
      {!data?<div className="citizenPreview">
        <div className="citizenPreviewTop"><span>UMA FERRAMENTA BRIO</span><b>BR</b></div>
        <h3>Da prefeitura até Brasília.</h3>
-       <p>Descubra quem foi eleito para o Executivo e quem exerce mandato representando seu estado no Congresso.</p>
+       <p>Descubra quem está no Executivo e quem exerce mandato representando seu estado no Congresso.</p>
        <div className="citizenPreviewSteps">
          <div><b>01</b><span>Informe sua localização</span></div>
          <div><b>02</b><span>Veja Executivo e Congresso</span></div>
@@ -80,23 +81,24 @@ export default function CitizenFinder(){
        </div>
 
        {executives.length>0&&<div className="citizenGroup citizenExecutiveGroup">
-         <div className="citizenGroupHead"><span>PODER EXECUTIVO</span><small>resultado eleitoral oficial</small></div>
+         <div className="citizenGroupHead"><span>PODER EXECUTIVO</span><small>situação atual quando confirmada</small></div>
          <div className="citizenExecutives">{executives.map(person=><ExecutiveCard key={person.id} person={person}/>)}</div>
-         <p className="citizenExecutiveNote">Os dados do Executivo refletem o resultado oficial das eleições. Eventuais mudanças por sucessão, afastamento ou decisão judicial podem não aparecer imediatamente.</p>
+         <p className="citizenExecutiveNote">Quando há confirmação oficial de mudança no cargo, o BRIO prioriza o ocupante atual. Caso contrário, exibe o resultado eleitoral como referência.</p>
        </div>}
 
        <div className="citizenGroup">
-         <div className="citizenGroupHead"><span>SENADO FEDERAL</span><small>{data.senators.length} em exercício pelo estado</small></div>
+         <div className="citizenGroupHead"><span>SENADO FEDERAL</span><small>{data.senators.length?data.senators.length+' em exercício pelo estado':'fonte temporariamente indisponível'}</small></div>
          <div className="citizenSenators">{data.senators.map(person=><Person key={'s'+person.id} person={person} type="SENADOR(A)"/>)}</div>
        </div>
 
        <div className="citizenGroup citizenDeputiesGroup">
-         <div className="citizenGroupHead"><span>CÂMARA DOS DEPUTADOS</span><small>{deputies.length} deputados federais</small></div>
-         <div className="citizenDeputies">{visibleDeputies.map(person=><Person key={'d'+person.id} person={person} type="DEPUTADO(A) FEDERAL"/>)}</div>
+         <div className="citizenGroupHead"><span>CÂMARA DOS DEPUTADOS</span><small>{data.deputiesFallback?'API ao vivo indisponível · exibindo bancada eleita em 2022':deputies.length?deputies.length+' deputados federais em exercício':'fonte temporariamente indisponível'}</small></div>
+         <div className="citizenDeputies">{visibleDeputies.map(person=><Person key={'d'+person.id} person={person} type={person.fallback?'ELEITO(A) EM 2022':'DEPUTADO(A) FEDERAL'}/>)}</div>
          {deputies.length>6&&<button className="citizenMore" onClick={()=>setShowAll(v=>!v)}>{showAll?'MOSTRAR MENOS':'VER TODOS OS '+deputies.length+' DEPUTADOS'} <b>{showAll?'↑':'↓'}</b></button>}
        </div>
 
-       <div className="citizenSource"><span>Dados públicos consultados em fontes oficiais</span><b>TSE · Câmara dos Deputados · Senado Federal</b></div>
+       {unavailable.length>0&&<p className="citizenExecutiveNote">Consulta parcial: {unavailable.join(', ')} {unavailable.length===1?'está':'estão'} temporariamente indisponível{unavailable.length===1?'':'is'}.</p>}
+       <div className="citizenSource"><span>Dados públicos consultados em fontes oficiais</span><b>Governos locais · TSE · Câmara · Senado</b></div>
      </div>}
    </div>
  </section>;
