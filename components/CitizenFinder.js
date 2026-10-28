@@ -11,6 +11,20 @@ function Person({person,type}){
  </a>
 }
 
+function ExecutiveCard({person}){
+ if(!person)return null;
+ return <a className="citizenExecutiveCard" href={person.url} target="_blank" rel="noreferrer">
+   <div className="citizenExecutivePhoto">{person.photo?<img src={person.photo} alt={person.name}/>:<span>{person.name?.slice(0,1)}</span>}</div>
+   <div className="citizenExecutiveCopy">
+     <small>{person.office}</small>
+     <strong>{person.name}</strong>
+     <span>{person.party||'Partido não informado'} · {person.uf}</span>
+     <em>{person.term}</em>
+   </div>
+   <div className="citizenExecutiveMeta"><span>{person.elected}</span><b>↗</b></div>
+ </a>
+}
+
 export default function CitizenFinder(){
  const [query,setQuery]=useState('');
  const [data,setData]=useState(null);
@@ -33,13 +47,14 @@ export default function CitizenFinder(){
  function submit(e){e.preventDefault();search();}
  const deputies=data?.deputies||[];
  const visibleDeputies=showAll?deputies:deputies.slice(0,6);
+ const executives=[data?.executives?.mayor,data?.executives?.governor].filter(Boolean);
 
  return <section className="citizen" id="comunidade">
    <div className="container citizenShell">
      <div className="citizenIntro">
        <span className="citizenEyebrow"><i/> BRIO CIDADÃO</span>
        <h2>Quem representa você?</h2>
-       <p>Digite seu CEP ou sua cidade e descubra quem ocupa os cargos que representam o seu estado em Brasília.</p>
+       <p>Digite seu CEP ou sua cidade e veja quem governa sua cidade e seu estado, além de quem representa você em Brasília.</p>
        <form className="citizenSearch" onSubmit={submit}>
          <input value={query} onChange={e=>setQuery(e.target.value)} placeholder="CEP ou Cidade, UF" aria-label="CEP ou cidade e UF"/>
          <button disabled={loading}>{loading?'BUSCANDO…':'DESCOBRIR'} <b>→</b></button>
@@ -51,18 +66,24 @@ export default function CitizenFinder(){
 
      {!data?<div className="citizenPreview">
        <div className="citizenPreviewTop"><span>UMA FERRAMENTA BRIO</span><b>BR</b></div>
-       <h3>Da sua cidade até Brasília.</h3>
-       <p>Veja quem está exercendo mandato pelo seu estado, com acesso direto aos perfis oficiais.</p>
+       <h3>Da prefeitura até Brasília.</h3>
+       <p>Descubra quem foi eleito para o Executivo e quem exerce mandato representando seu estado no Congresso.</p>
        <div className="citizenPreviewSteps">
          <div><b>01</b><span>Informe sua localização</span></div>
-         <div><b>02</b><span>Veja seus representantes</span></div>
-         <div><b>03</b><span>Acesse a fonte oficial</span></div>
+         <div><b>02</b><span>Veja Executivo e Congresso</span></div>
+         <div><b>03</b><span>Confira a fonte oficial</span></div>
        </div>
      </div>:<div className="citizenResult">
        <div className="citizenResultHead">
          <div><span>SUA LOCALIDADE</span><h3>{data.city} <i>·</i> {data.uf}</h3></div>
          <button onClick={()=>{setData(null);setQuery('');}}>ALTERAR</button>
        </div>
+
+       {executives.length>0&&<div className="citizenGroup citizenExecutiveGroup">
+         <div className="citizenGroupHead"><span>PODER EXECUTIVO</span><small>resultado eleitoral oficial</small></div>
+         <div className="citizenExecutives">{executives.map(person=><ExecutiveCard key={person.id} person={person}/>)}</div>
+         <p className="citizenExecutiveNote">Os dados do Executivo refletem o resultado oficial das eleições. Eventuais mudanças por sucessão, afastamento ou decisão judicial podem não aparecer imediatamente.</p>
+       </div>}
 
        <div className="citizenGroup">
          <div className="citizenGroupHead"><span>SENADO FEDERAL</span><small>{data.senators.length} em exercício pelo estado</small></div>
@@ -75,7 +96,7 @@ export default function CitizenFinder(){
          {deputies.length>6&&<button className="citizenMore" onClick={()=>setShowAll(v=>!v)}>{showAll?'MOSTRAR MENOS':'VER TODOS OS '+deputies.length+' DEPUTADOS'} <b>{showAll?'↑':'↓'}</b></button>}
        </div>
 
-       <div className="citizenSource"><span>Dados públicos atualizados pelas fontes oficiais</span><b>Câmara dos Deputados · Senado Federal</b></div>
+       <div className="citizenSource"><span>Dados públicos consultados em fontes oficiais</span><b>TSE · Câmara dos Deputados · Senado Federal</b></div>
      </div>}
    </div>
  </section>;
