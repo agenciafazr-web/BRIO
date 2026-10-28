@@ -53,27 +53,45 @@ export default function CitizenFinder(){
  return <section className="citizen" id="comunidade">
    <div className="container citizenShell">
      <div className="citizenIntro">
-       <span className="citizenEyebrow"><i/> BRIO CIDADÃO</span>
+       <div className="citizenIntroTop">
+         <span className="citizenEyebrow"><i/> BRIO CIDADÃO</span>
+         <span className="citizenOfficial"><i/> FONTES OFICIAIS</span>
+       </div>
        <h2>Quem representa você?</h2>
        <p>Digite seu CEP ou sua cidade e veja quem governa sua cidade e seu estado, além de quem representa você em Brasília.</p>
        <form className="citizenSearch" onSubmit={submit}>
          <input value={query} onChange={e=>setQuery(e.target.value)} placeholder="CEP ou Cidade, UF" aria-label="CEP ou cidade e UF"/>
          <button disabled={loading}>{loading?'BUSCANDO…':'DESCOBRIR'} <b>→</b></button>
        </form>
-       <div className="citizenPresets">{presets.map(item=><button key={item} onClick={()=>search(item)}>{item}</button>)}</div>
+       <div className="citizenPresets"><span>EXEMPLOS</span>{presets.map(item=><button key={item} onClick={()=>search(item)}>{item}</button>)}</div>
        {error&&<div className="citizenError">{error}</div>}
        <small className="citizenPrivacy">Sua busca serve apenas para localizar município e estado. O BRIO não guarda seu CEP.</small>
      </div>
 
      {!data?<div className="citizenPreview">
-       <div className="citizenPreviewTop"><span>UMA FERRAMENTA BRIO</span><b>BR</b></div>
-       <h3>Da prefeitura até Brasília.</h3>
-       <p>Descubra quem está no Executivo e quem exerce mandato representando seu estado no Congresso.</p>
-       <div className="citizenPreviewSteps">
-         <div><b>01</b><span>Informe sua localização</span></div>
-         <div><b>02</b><span>Veja Executivo e Congresso</span></div>
-         <div><b>03</b><span>Confira a fonte oficial</span></div>
+       <div className="citizenPreviewGlow"/>
+       <div className="citizenPreviewTop">
+         <span><i/> MAPA DE REPRESENTAÇÃO</span>
+         <b>BRIO</b>
        </div>
+       <div className="citizenPreviewHero">
+         <div>
+           <small>DO MUNICÍPIO AO CONGRESSO</small>
+           <h3>Veja quem ocupa cada cadeira.</h3>
+           <p>Uma única busca organiza seus representantes por nível de poder e leva você direto às fontes oficiais.</p>
+         </div>
+         <div className="citizenPreviewPulse">
+           <strong>4</strong>
+           <span>níveis de<br/>representação</span>
+         </div>
+       </div>
+       <div className="citizenRepresentationMap">
+         <div className="citizenRepCard"><b>01</b><div><strong>Prefeitura</strong><span>Quem governa sua cidade</span></div><i>→</i></div>
+         <div className="citizenRepCard"><b>02</b><div><strong>Governo do Estado</strong><span>Quem governa sua UF</span></div><i>→</i></div>
+         <div className="citizenRepCard"><b>03</b><div><strong>Senado Federal</strong><span>Senadores em exercício</span></div><i>→</i></div>
+         <div className="citizenRepCard"><b>04</b><div><strong>Câmara</strong><span>Deputados federais da sua UF</span></div><i>→</i></div>
+       </div>
+       <div className="citizenPreviewHint"><i/> Digite sua cidade ao lado para montar seu mapa <b>↗</b></div>
      </div>:<div className="citizenResult">
        <div className="citizenResultHead">
          <div><span>SUA LOCALIDADE</span><h3>{data.city} <i>·</i> {data.uf}</h3></div>
