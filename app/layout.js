@@ -1,6 +1,7 @@
 import './globals.css';
 import './home-premium.css';
 import './home-newshero.css';
+import './citizen.css';
 import './editoria/editoria.css';
 import './admin/ads-admin.css';
 import './admin/ad-formats.css';
